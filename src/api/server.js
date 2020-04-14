@@ -1,16 +1,14 @@
 import axios from "axios";
 
-export const fetchAllPokemon = (payload) => {
+export const fetchAllPokemon = () => {
   const URL = `https://pokeapi.co/api/v2/pokemon`;
-  return axios(URL, {
-    method: "GET",
-    headers: {
-      "content-type": "application/json", // whatever you want
-    },
-    data: payload,
-  })
-    .then((response) => response.data)
-    .catch((error) => {
-      throw error;
+  axios
+    .get(URL)
+    .then(function (response) {
+      console.log(response);
+      return response.data;
+    })
+    .catch(function (error) {
+      console.log(error);
     });
 };
