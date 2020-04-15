@@ -1,27 +1,43 @@
 import React, { useState, useEffect } from "react";
 import PokemonList from "./Components/PokemonList";
+
 // import axios from "axios";
 // import Pagination from "./Components/Pagination";
 import { fetchAllPokemon } from "./api/server";
 
 function App() {
   const [pokemon, setPokemon] = useState([]);
-  // const [currentPageUrl, setCurrentPageUrl] = useState("");
-  // const [nextPageUrl, setNextPageUrl] = useState();
-  // const [prevPageUrl, setPrevPageUrl] = useState();
-  // const [loading, setLoading] = useState(true);
+  const [currentPageUrl, setCurrentPageUrl] = useState(
+    "https://pokeapi.co/api/v2/pokemon"
+  );
+  const [nextPageUrl, setNextPageUrl] = useState();
+  const [prevPageUrl, setPrevPageUrl] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let mounted = true;
+    let response;
+    // resets the loading state so it shows loading between api calls
+    setLoading(true);
     const fetchPokemon = async () => {
-      const response = await fetchAllPokemon();
-
-      console.log("in useEffect on load: ", response.data);
+      response = await fetchAllPokemon(currentPageUrl);
+      // data has been found, loading false
+      setLoading(false);
+      // sets urls for button onclicks
+      setNextPageUrl(response.data.next);
+      setPrevPageUrl(response.data.previous);
+      // getting just pokemon names atm
+      setPokemon(response.data.results.map((pokemon) => pokemon.name));
     };
     fetchPokemon();
-  }, []);
 
-  // if (loading) return "Loading...";
+    return () => {
+      response.cancel();
+    };
+
+    // waits till url changes from the button click for next and prev
+  }, [currentPageUrl]);
+
+  if (loading) return "Loading...";
 
   return (
     <>
