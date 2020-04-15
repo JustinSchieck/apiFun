@@ -10,12 +10,14 @@ function App() {
   // const [nextPageUrl, setNextPageUrl] = useState();
   // const [prevPageUrl, setPrevPageUrl] = useState();
   // const [loading, setLoading] = useState(true);
-  const fetchPokemon = async () => {
-    const data = await fetchAllPokemon();
-    data.results.map((p) => setPokemon(p.name));
-  };
 
   useEffect(() => {
+    let mounted = true;
+    const fetchPokemon = async () => {
+      const response = await fetchAllPokemon();
+
+      console.log("in useEffect on load: ", response.data);
+    };
     fetchPokemon();
   }, []);
 
