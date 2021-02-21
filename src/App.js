@@ -1,57 +1,28 @@
-import React, { useState, useEffect } from "react";
-import PokemonList from "./Components/PokemonList";
-import { fetchAllPokemon } from "./api/server";
-import Pagination from "./Components/Pagination";
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
+import { Pokedex } from './Containers/Pokedex';
+import { MyHeroDex } from './Containers/MyHeroes';
+import { Home } from './Containers/Home';
+import Header from './Components/Header';
+
 
 function App() {
-  const [pokemon, setPokemon] = useState([]);
-  const [currentPageUrl, setCurrentPageUrl] = useState(
-    "https://pokeapi.co/api/v2/pokemon"
-  );
-  const [nextPageUrl, setNextPageUrl] = useState();
-  const [prevPageUrl, setPrevPageUrl] = useState();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let response;
-    // resets the loading state so it shows loading between api calls
-    setLoading(true);
-    const fetchPokemon = async () => {
-      response = await fetchAllPokemon(currentPageUrl);
-      // data has been found, loading false
-      setLoading(false);
-      // sets urls for button onclicks
-      setNextPageUrl(response.data.next);
-      setPrevPageUrl(response.data.previous);
-      // getting just pokemon names atm
-      setPokemon(response.data.results.map((pokemon) => pokemon.name));
-    };
-    fetchPokemon();
-
-    return () => response.cancel();
-
-    // waits till url changes from the button click for next and prev
-  }, [currentPageUrl]);
-
-  function goToNextPage() {
-    setCurrentPageUrl(nextPageUrl);
-  }
-
-  function goToPrevPage() {
-    setCurrentPageUrl(prevPageUrl);
-  }
-
-  if (loading) return "Loading...";
-
   return (
-    <>
-      <PokemonList pokemon={pokemon} />
-      <Pagination
-        goToNextPage={nextPageUrl ? goToNextPage : null}
-        goToPrevPage={prevPageUrl ? goToPrevPage : null}
-      />
-    </>
-  );
+      <Router>
+        <div>
+          <Header />
+          <Switch>
+            <Route exact path="/" component={Home} />    
+            <Route path="/pokedex" component={Pokedex} />
+            <Route path="/myHeroes" component={MyHeroDex} />
+          </Switch>
+        </div>
+      </Router>
+    );  
 }
 
 export default App;

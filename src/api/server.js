@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const fetchAllPokemon = async (url) => {
+export const fetchAll = async (url) => {
   let cancel;
   let data;
   await axios
@@ -15,3 +15,4 @@ export const fetchAllPokemon = async (url) => {
     });
   return { data, cancel };
 };
+
