@@ -21,15 +21,15 @@ export const MyHeroDex = () => {
 
     const fetchHeroes = async () => {
       response = await fetchAll(currentPageUrl);
-
+      console.log(JSON.stringify(response));
       setLoading(false);
-      setNextPageUrl(`https://myheroacademiaapi.com/api/character?page=${response.data.info.currentPage + 1}`);
-      setPrevPageUrl(`https://myheroacademiaapi.com/api/character?page=${response.data.info.currentPage - 1}`);
+      // setNextPageUrl(`https://myheroacademiaapi.com/api/character?page=${response.data.info.currentPage + 1}`);
+      // setPrevPageUrl(`https://myheroacademiaapi.com/api/character?page=${response.data.info.currentPage - 1}`);
       setHeroes(response.data.result.map((hero) => hero.name ? hero.name : hero.id));
 
     }
     fetchHeroes();
-    return () => response.cancel();
+    return;
   }, [currentPageUrl]);
 
 
@@ -45,14 +45,14 @@ export const MyHeroDex = () => {
 
   return (
     <>
-    <HeroList hero={heroes} />
-    <Pagination
+      <HeroList hero={heroes} />
+      <Pagination
         goToNextPage={nextPageUrl ? goToNextPage : null}
         goToPrevPage={prevPageUrl ? goToPrevPage : null}
       />
     </>
   );
-  
+
 }
 
 
